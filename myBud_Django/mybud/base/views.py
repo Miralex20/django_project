@@ -6,6 +6,11 @@ from django.db.models import Q
 topics = Topic.objects.all()
 
 
+def LoginPage(request):
+    context = {}
+    return render(request, "base/login_register.html", context)
+
+
 def home(request):
     q = request.GET.get("q") if request.GET.get("q") != None else ''
     rooms = Room.objects.filter(Q(topic__name__icontains = q) |
