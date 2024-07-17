@@ -74,7 +74,7 @@ def room(request, pk):
         message = Message.objects.create(
             user = request.user,
             room = room,
-            body = request.POST.get("text")
+            body = request.POST.get("body")
         )
         room.participants.add(request.user)
         return redirect('room', pk=room.id)
