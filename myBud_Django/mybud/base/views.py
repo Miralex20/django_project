@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Room, Topic, Message
-from .forms import RoomForm, MessageForm
+from .forms import RoomForm, UserForm
 from django.db.models import Q
 from django.http import HttpResponse
 from django.contrib.auth.models import User
@@ -96,38 +96,42 @@ def userProfile(request, pk):
 
 @login_required(login_url='login')
 def createRoom(request):
+     page = 'create'
+     topics = Topic.objects.all()
      form = RoomForm()
      if request.method == "POST":
-        form = RoomForm(request.POST)
-        if form.is_valid():
-            room = form.save(commit=False)
-            room.host = request.user
-            form.save()
-            return redirect("home")
+        topic_name = request.POST.get("topic")
+        topic, created = Topic.objects.get_or_create(name=topic_name)
+        Room.objects.create(topic=topic,
+                            host = request.user,
+                            name = request.POST.get('name'),
+                            description = request.POST.get('description'))
+        return redirect('home')
         
-     context ={'form' : form} 
+     context ={'form' : form, 'topics' :topics, 'page': page} 
      return render(request, "base/room_form.html", context)
 
 
 @login_required(login_url='login')
 def updateRoom(request, pk):
+    topics = Topic.objects.all()
     room = Room.objects.get(id  = pk)
     form = RoomForm(instance=room)
-    if request.user != room.host:
-        return HttpResponse('You are not allowed here')
     if request.method == "POST":
-        form = RoomForm(request.POST, instance=room)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    context = {'form' : form}
+      topic_name = request.POST.get('topic')
+      topic, created = Topic.objects.get_or_create(name=topic_name)
+      room.name = request.POST.get("name")
+      room.description = request.POST.get('description')
+      room.topic = topic
+      room.save()
+      return redirect('home')
+    
+    context = {'form' : form, 'topics': topics, 'room':room}
     return render(request, "base/room_form.html", context)
 
 @login_required(login_url='login')
 def deleteRoom(request, pk):
     room = Room.objects.get(id=pk)
-    if request.user != room.host:
-        return HttpResponse('You are not allowed here')
     if request.method == "POST":
         room.delete()
         return redirect("home")
@@ -143,14 +147,13 @@ def deleteMessage(request, pk):
     return render(request, "base/delete.html", {"obj": message})
 
 @login_required(login_url='login')
-def updateMessage(request, pk):
-    message = Message.objects.get(id  = pk)
-    form = MessageForm(instance=message)
-    if request.user == message.user:
-        if request.method == "POST":
-            form = MessageForm(request.POST, instance=message)
-            if form.is_valid():
-                form.save()
-                return redirect('home')
+def updateUser(request):
+    user = request.user
+    form = UserForm(instance=user)
+    if request.method == 'POST':
+        form = UserForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect("user-profile", user.id)
     context = {'form' : form}
-    return render(request, "base/room_form.html", context)
+    return render(request, "base/update-user.html", context)
