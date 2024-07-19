@@ -17,7 +17,7 @@
         </div>
 
         <div class="topics-page layout__body">
-          <form class="header__search" action="{% url 'home' %}" method="get">
+          <form class="header__search" action="{% url 'topics' %}" method="get">
             <label>
               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
                 <title>search</title>
@@ -29,14 +29,12 @@
 
           <ul class="topics__list">
             <li>
-              <a href="{% url 'topics' %}" class="active">All <span>{{ topics.count }}</span></a>
+              <a href="{% url 'topics' %}" class="active">All Available Topics<span>{{ topics.count }}</span></a>
             </li>
             {% for topic in topics %}
-              {% if topic.room_set.all.count > 0 %}
-                <li>
-                  <a href="{% url 'topics' %}?q= {{ topic.name }}">{{ topic.name }} <span>{{ topic.room_set.all.count }}</span></a>
-                </li>
-              {% endif %}
+              <li>
+                <a href="{% url 'home' %}?q={{ topic.name }}">{{ topic.name }} <span>{{ topic.room_set.all.count }}</span></a>
+              </li>
             {% endfor %}
           </ul>
         </div>
