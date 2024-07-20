@@ -16,8 +16,8 @@
             <form class="form" action="#" method="post">
               {% csrf_token %}
               <div class="form__group form__group">
-                <label for="room_name">Username</label>
-                <input id="username" name="username" type="text" placeholder="what's your username" />
+                <label for="room_name">Email</label>
+                <input id="email" name="email" type="text" placeholder="what's your email" />
               </div>
               <div class="form__group">
                 <label for="password">Password</label>
@@ -61,10 +61,6 @@
                   {{ field }}
                 </div>
               {% endfor %}
-              <!--     <div class="form__group">
-                <label for="password">Password</label>
-                <input id="password" name="password" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" />
-              </div>      -->
 
               <button class="btn btn--main" type="submit">
                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
