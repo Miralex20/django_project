@@ -11,7 +11,7 @@
         <div class="profile">
           <div class="profile__avatar">
             <div class="avatar avatar--large active">
-              <img src="https://randomuser.me/api/portraits/men/11.jpg" />
+              <img src="{{ user.avatar.url }}" />
             </div>
           </div>
           <div class="profile__info">
@@ -29,7 +29,7 @@
 
         <div class="roomList__header">
           <div>
-            <h2>Study Rooms Hosted by {{ user }}</h2>
+            <h2>Study Rooms Hosted by {{ user.name }}</h2>
           </div>
         </div>
         {% include 'base/feed_components.html' %}
