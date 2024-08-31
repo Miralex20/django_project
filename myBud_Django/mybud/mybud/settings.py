@@ -25,7 +25,10 @@ SECRET_KEY = 'django-insecure-a+3&^)h@k(lplcs1)r(+#+&#lnt5i=n_udps#ux$wprcj0!x0+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    h for h in os.getenv('ALLOWED_HOSTS', '').split(",") if h
+]
+
 
 
 # Application definition
