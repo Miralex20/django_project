@@ -3,13 +3,14 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
+    username = models.EmailField(unique=True, null=True)
     name = models.CharField(max_length=200, null=True)
     email = models.EmailField(null = True, unique=True)
     bio = models.TextField(null=True)
 
     avatar = models.ImageField(null=True, default='avatar.svg')
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
 
 
 # Create your models here.
